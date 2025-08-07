@@ -25,14 +25,14 @@ jobs:
       - name: Authenticate to npm
         run: npm set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
-      - name: Install deps & build & test
-        run: |
-          npm ci
-          npm run test:ci
-          npm run build
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
-          NODE_ENV: production
+      - name: Install deps
+        run: npm ci
+
+      - name: Test
+        run: npm run test:ci
+
+      - name: Build
+        run: npm run build
 
       - name: Publish package
         run: npm publish --access public
