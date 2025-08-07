@@ -1,0 +1,215 @@
+---
+import CodeExample from '../../../components/CodeExample.astro';
+import StackExample from '../../../components/StackExample';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="useStack - Data Structure React Hooks">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/docs" class="hover:text-blue-600">Docs</a>
+        <span class="mx-2">/</span>
+        <a href="/docs/hooks" class="hover:text-blue-600">Hooks</a>
+        <span class="mx-2">/</span>
+        <span>useStack</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">useStack</h1>
+      <p class="text-xl text-gray-600">
+        A hook that returns a reactive Stack with push, pop, peek, and isEmpty operations.
+      </p>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      <h2>Installation</h2>
+      <CodeExample code="import { useStack } from 'data-strcture-react-hooks';" />
+
+      <h2>Basic Usage</h2>
+      <CodeExample code={`function MyComponent() {
+  const stack = useStack(['item1', 'item2']);
+
+  return (
+    <div>
+      <p>Size: {stack.size}</p>
+      <button onClick={() => stack.push('item3')}>Push</button>
+      <button onClick={() => stack.pop()}>Pop</button>
+    </div>
+  );
+}`} />
+
+      <h2>API Reference</h2>
+
+      <h3>Parameters</h3>
+      <ul>
+        <li><code>defaultValue</code> (T[]): The initial stack values</li>
+      </ul>
+
+      <h3>Returns</h3>
+      <p>A reactive Stack object with the following methods and properties:</p>
+
+      <h3>Methods</h3>
+      <ul>
+        <li><code>push(item)</code> - Adds an item to the top of the stack</li>
+        <li><code>pop()</code> - Removes and returns the item from the top of the stack</li>
+        <li><code>peek</code> - Returns the top item without removing it</li>
+        <li><code>isEmpty</code> - Checks if the stack is empty</li>
+      </ul>
+
+      <h3>Properties</h3>
+      <ul>
+        <li><code>size</code> - The number of items in the stack</li>
+      </ul>
+
+      <h2>Live Example</h2>
+      <p>Try out the useStack hook with this interactive example:</p>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+        <StackExample client:load />
+      </div>
+
+      <h2>Examples</h2>
+
+      <h3>Basic Stack Operations</h3>
+      <CodeExample code={`const stack = useStack(['bottom', 'middle']);
+
+// Add items
+stack.push('top');               // Stack: ['bottom', 'middle', 'top']
+stack.push('new-top');           // Stack: ['bottom', 'middle', 'top', 'new-top']
+
+// Remove items
+stack.pop();                     // Returns 'new-top', Stack: ['bottom', 'middle', 'top']
+stack.pop();                     // Returns 'top', Stack: ['bottom', 'middle']
+
+// Peek at top
+stack.peek;                      // Returns 'middle' (doesn't remove it)`} />
+
+      <h3>Undo/Redo System Example</h3>
+      <CodeExample code={`function UndoRedoSystem() {
+  const undoStack = useStack([]);
+  const redoStack = useStack([]);
+  const [currentText, setCurrentText] = useState('');
+
+  const saveState = (text) => {
+    undoStack.push(currentText);
+    setCurrentText(text);
+    redoStack.clear(); // Clear redo when new action is performed
+  };
+
+  const undo = () => {
+    if (!undoStack.isEmpty) {
+      const previousState = undoStack.pop();
+      redoStack.push(currentText);
+      setCurrentText(previousState);
+    }
+  };
+
+  const redo = () => {
+    if (!redoStack.isEmpty) {
+      const nextState = redoStack.pop();
+      undoStack.push(currentText);
+      setCurrentText(nextState);
+    }
+  };
+
+  return (
+    <div>
+      <textarea
+        value={currentText}
+        onChange={(e) => saveState(e.target.value)}
+        placeholder="Type something..."
+      />
+
+      <div>
+        <button onClick={undo} disabled={undoStack.isEmpty}>
+          Undo
+        </button>
+        <button onClick={redo} disabled={redoStack.isEmpty}>
+          Redo
+        </button>
+      </div>
+
+      <p>Undo stack size: {undoStack.size}</p>
+      <p>Redo stack size: {redoStack.size}</p>
+    </div>
+  );
+}`} />
+
+      <h3>Browser History Example</h3>
+      <CodeExample code={`function BrowserHistory() {
+  const historyStack = useStack(['home']);
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const navigateTo = (page) => {
+    historyStack.push(currentPage);
+    setCurrentPage(page);
+  };
+
+  const goBack = () => {
+    if (!historyStack.isEmpty) {
+      const previousPage = historyStack.pop();
+      setCurrentPage(previousPage);
+    }
+  };
+
+  return (
+    <div>
+      <h3>Current Page: {currentPage}</h3>
+
+      <div>
+        <button onClick={() => navigateTo('about')}>About</button>
+        <button onClick={() => navigateTo('contact')}>Contact</button>
+        <button onClick={() => navigateTo('products')}>Products</button>
+      </div>
+
+      <button onClick={goBack} disabled={historyStack.isEmpty}>
+        ← Back
+      </button>
+
+      <p>History stack size: {historyStack.size}</p>
+      <p>Previous page: {historyStack.peek || 'None'}</p>
+    </div>
+  );
+}`} />
+
+      <h2>How It Works</h2>
+      <p>
+        The useStack hook is built on top of the useArray hook and provides a stack interface
+        with push, pop, peek, and isEmpty operations. When a mutating method (push, pop) is called,
+        it triggers a re-render of the component by updating an internal state variable.
+      </p>
+
+      <h2>Stack Implementation</h2>
+      <p>
+        The Stack is implemented using an array structure for efficient operations:
+      </p>
+      <ul>
+        <li><strong>Push:</strong> O(1) - Adds item to the top</li>
+        <li><strong>Pop:</strong> O(1) - Removes item from the top</li>
+        <li><strong>Peek:</strong> O(1) - Views top item without removal</li>
+      </ul>
+
+      <h2>TypeScript Support</h2>
+      <p>
+        The hook is fully typed and supports generic types:
+      </p>
+      <CodeExample code={`const stringStack = useStack<string>(['a', 'b', 'c']);
+const numberStack = useStack<number>([1, 2, 3]);
+const objectStack = useStack<{id: number, name: string}>([
+  { id: 1, name: 'John' }
+]);`} />
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <div class="flex justify-between">
+          <a href="/docs/hooks/useQueue" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Previous: useQueue
+          </a>
+          <a href="/docs/hooks" class="text-blue-600 hover:text-blue-700 font-medium">
+            Back to Hooks →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

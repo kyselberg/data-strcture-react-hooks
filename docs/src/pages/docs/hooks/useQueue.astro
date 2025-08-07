@@ -1,0 +1,222 @@
+---
+import CodeExample from '../../../components/CodeExample.astro';
+import QueueExample from '../../../components/QueueExample';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="useQueue - Data Structure React Hooks">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/docs" class="hover:text-blue-600">Docs</a>
+        <span class="mx-2">/</span>
+        <a href="/docs/hooks" class="hover:text-blue-600">Hooks</a>
+        <span class="mx-2">/</span>
+        <span>useQueue</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">useQueue</h1>
+      <p class="text-xl text-gray-600">
+        A hook that returns a reactive Queue with enqueue, dequeue, peek, and isEmpty operations.
+      </p>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      <h2>Installation</h2>
+      <CodeExample code="import { useQueue } from 'data-strcture-react-hooks';" />
+
+      <h2>Basic Usage</h2>
+      <CodeExample code={`function MyComponent() {
+  const queue = useQueue(['item1', 'item2']);
+
+  return (
+    <div>
+      <p>Size: {queue.size}</p>
+      <button onClick={() => queue.enqueue('item3')}>Enqueue</button>
+      <button onClick={() => queue.dequeue()}>Dequeue</button>
+    </div>
+  );
+}`} />
+
+      <h2>API Reference</h2>
+
+      <h3>Parameters</h3>
+      <ul>
+        <li><code>defaultValue</code> (T[]): The initial queue values</li>
+      </ul>
+
+      <h3>Returns</h3>
+      <p>A reactive Queue object with the following methods and properties:</p>
+
+      <h3>Methods</h3>
+      <ul>
+        <li><code>enqueue(item)</code> - Adds an item to the back of the queue</li>
+        <li><code>dequeue()</code> - Removes and returns the item from the front of the queue</li>
+        <li><code>peek()</code> - Returns the front item without removing it</li>
+        <li><code>isEmpty()</code> - Checks if the queue is empty</li>
+      </ul>
+
+      <h3>Properties</h3>
+      <ul>
+        <li><code>size</code> - The number of items in the queue</li>
+      </ul>
+
+      <h2>Live Example</h2>
+      <p>Try out the useQueue hook with this interactive example:</p>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+        <QueueExample client:load />
+      </div>
+
+      <h2>Examples</h2>
+
+      <h3>Basic Queue Operations</h3>
+      <CodeExample code={`const queue = useQueue(['first', 'second']);
+
+// Add items
+queue.enqueue('third');          // Queue: ['first', 'second', 'third']
+queue.enqueue('fourth');         // Queue: ['first', 'second', 'third', 'fourth']
+
+// Remove items
+queue.dequeue();                 // Returns 'first', Queue: ['second', 'third', 'fourth']
+queue.dequeue();                 // Returns 'second', Queue: ['third', 'fourth']
+
+// Peek at front
+queue.peek();                    // Returns 'third' (doesn't remove it)`} />
+
+      <h3>Task Queue Example</h3>
+      <CodeExample code={`function TaskQueue() {
+  const taskQueue = useQueue([]);
+  const [taskInput, setTaskInput] = useState('');
+
+  const addTask = () => {
+    if (taskInput.trim()) {
+      taskQueue.enqueue({
+        id: Date.now(),
+        description: taskInput,
+        completed: false
+      });
+      setTaskInput('');
+    }
+  };
+
+  const processNextTask = () => {
+    const task = taskQueue.dequeue();
+    if (task) {
+      console.log('Processing:', task.description);
+    }
+  };
+
+  return (
+    <div>
+      <div>
+        <input
+          value={taskInput}
+          onChange={(e) => setTaskInput(e.target.value)}
+          placeholder="Enter a task"
+        />
+        <button onClick={addTask}>Add Task</button>
+      </div>
+
+      <div>
+        <button onClick={processNextTask}>Process Next Task</button>
+        <p>Queue size: {taskQueue.size}</p>
+        <p>Next task: {taskQueue.peek()?.description || 'None'}</p>
+      </div>
+
+      <div>
+        <h4>All Tasks:</h4>
+        {Array.from({ length: taskQueue.size }, (_, i) => {
+          // This is a simplified view - in real implementation you'd need to track items
+          return <div key={i}>Task {i + 1}</div>;
+        })}
+      </div>
+    </div>
+  );
+}`} />
+
+      <h3>Message Queue Example</h3>
+      <CodeExample code={`function MessageQueue() {
+  const messageQueue = useQueue([]);
+  const [message, setMessage] = useState('');
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      messageQueue.enqueue({
+        id: Date.now(),
+        text: message,
+        timestamp: new Date().toISOString()
+      });
+      setMessage('');
+    }
+  };
+
+  const processMessage = () => {
+    const msg = messageQueue.dequeue();
+    if (msg) {
+      alert(\`Processing: \${msg.text}\`);
+    }
+  };
+
+  return (
+    <div>
+      <div>
+        <input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Enter a message"
+        />
+        <button onClick={sendMessage}>Send Message</button>
+      </div>
+
+      <div>
+        <button onClick={processMessage}>Process Message</button>
+        <p>Messages in queue: {messageQueue.size}</p>
+        <p>Next message: {messageQueue.peek()?.text || 'None'}</p>
+      </div>
+    </div>
+  );
+}`} />
+
+      <h2>How It Works</h2>
+      <p>
+        The useQueue hook uses JavaScript's Proxy API to intercept method calls on the Queue.
+        When a mutating method (enqueue, dequeue) is called, it triggers a re-render of
+        the component by updating an internal state variable. This ensures that your UI stays
+        in sync with the Queue's state.
+      </p>
+
+      <h2>Queue Implementation</h2>
+      <p>
+        The Queue is implemented using a linked list structure for efficient enqueue and dequeue operations:
+      </p>
+      <ul>
+        <li><strong>Enqueue:</strong> O(1) - Adds item to the back</li>
+        <li><strong>Dequeue:</strong> O(1) - Removes item from the front</li>
+        <li><strong>Peek:</strong> O(1) - Views front item without removal</li>
+      </ul>
+
+      <h2>TypeScript Support</h2>
+      <p>
+        The hook is fully typed and supports generic types:
+      </p>
+      <CodeExample code={`const stringQueue = useQueue<string>(['a', 'b', 'c']);
+const numberQueue = useQueue<number>([1, 2, 3]);
+const objectQueue = useQueue<{id: number, name: string}>([
+  { id: 1, name: 'John' }
+]);`} />
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <div class="flex justify-between">
+          <a href="/docs/hooks/useSet" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Previous: useSet
+          </a>
+          <a href="/docs/hooks/useStack" class="text-blue-600 hover:text-blue-700 font-medium">
+            Next: useStack →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

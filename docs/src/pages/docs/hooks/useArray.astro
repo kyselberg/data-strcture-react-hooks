@@ -1,0 +1,164 @@
+---
+import ArrayExample from '../../../components/ArrayExample';
+import CodeExample from '../../../components/CodeExample.astro';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="useArray - Data Structure React Hooks">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/docs" class="hover:text-blue-600">Docs</a>
+        <span class="mx-2">/</span>
+        <a href="/docs/hooks" class="hover:text-blue-600">Hooks</a>
+        <span class="mx-2">/</span>
+        <span>useArray</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">useArray</h1>
+      <p class="text-xl text-gray-600">
+        A hook that returns a reactive array with all native Array methods that automatically trigger re-renders.
+      </p>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      <h2>Installation</h2>
+      <CodeExample code="import { useArray } from 'data-strcture-react-hooks';" />
+
+      <h2>Basic Usage</h2>
+      <CodeExample code={`function MyComponent() {
+  const array = useArray([1, 2, 3]);
+
+  return (
+    <div>
+      <p>Length: {array.length}</p>
+      <button onClick={() => array.push(4)}>Add Item</button>
+      <button onClick={() => array.pop()}>Remove Last</button>
+    </div>
+  );
+}`} />
+
+      <h2>API Reference</h2>
+
+      <h3>Parameters</h3>
+      <ul>
+        <li><code>defaultValue</code> (T[]): The initial array values</li>
+      </ul>
+
+      <h3>Returns</h3>
+      <p>A reactive array with all native Array methods that automatically trigger re-renders when mutated.</p>
+
+      <h3>Supported Methods</h3>
+      <p>The returned array supports all native Array methods that mutate the array:</p>
+      <ul>
+        <li><code>push(...items)</code> - Adds elements to the end</li>
+        <li><code>pop()</code> - Removes and returns the last element</li>
+        <li><code>shift()</code> - Removes and returns the first element</li>
+        <li><code>unshift(...items)</code> - Adds elements to the beginning</li>
+        <li><code>splice(start, deleteCount, ...items)</code> - Changes array contents</li>
+        <li><code>reverse()</code> - Reverses the array</li>
+        <li><code>sort(compareFunction?)</code> - Sorts the array</li>
+        <li><code>copyWithin(target, start, end)</code> - Copies elements within the array</li>
+        <li><code>with(index, value)</code> - Returns a new array with a single element changed</li>
+      </ul>
+
+      <h2>Live Example</h2>
+      <p>Try out the useArray hook with this interactive example:</p>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+        <ArrayExample client:load />
+      </div>
+
+      <h2>Examples</h2>
+
+      <h3>Basic Array Operations</h3>
+      <CodeExample code={`const array = useArray([1, 2, 3]);
+
+// Add elements
+array.push(4, 5);           // [1, 2, 3, 4, 5]
+array.unshift(0);           // [0, 1, 2, 3, 4, 5]
+
+// Remove elements
+array.pop();                 // [0, 1, 2, 3, 4]
+array.shift();               // [1, 2, 3, 4]
+
+// Modify elements
+array.splice(1, 2, 10, 11); // [1, 10, 11, 4]
+array.reverse();             // [4, 11, 10, 1]
+array.sort((a, b) => a - b); // [1, 4, 10, 11]`} />
+
+      <h3>Todo List Example</h3>
+      <CodeExample code={`function TodoList() {
+  const todos = useArray([]);
+  const [input, setInput] = useState('');
+
+  const addTodo = () => {
+    if (input.trim()) {
+      todos.push({ id: Date.now(), text: input, completed: false });
+      setInput('');
+    }
+  };
+
+  const toggleTodo = (index: number) => {
+    todos[index].completed = !todos[index].completed;
+  };
+
+  const removeTodo = (index: number) => {
+    todos.splice(index, 1);
+  };
+
+  return (
+    <div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Add todo..."
+      />
+      <button onClick={addTodo}>Add</button>
+
+      {todos.map((todo, index) => (
+        <div key={todo.id}>
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => toggleTodo(index)}
+          />
+          <span>{todo.text}</span>
+          <button onClick={() => removeTodo(index)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+}`} />
+
+      <h2>How It Works</h2>
+      <p>
+        The useArray hook uses JavaScript's Proxy API to intercept method calls on the array.
+        When a mutating method is called, it triggers a re-render of the component by updating
+        an internal state variable. This ensures that your UI stays in sync with the array's state.
+      </p>
+
+      <h2>TypeScript Support</h2>
+      <p>
+        The hook is fully typed and supports generic types:
+      </p>
+      <CodeExample code={`const numbers = useArray<number>([1, 2, 3]);
+const strings = useArray<string>(['a', 'b', 'c']);
+const objects = useArray<{id: number, name: string}>([
+  { id: 1, name: 'John' }
+]);`} />
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <div class="flex justify-between">
+          <a href="/docs/hooks" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Back to Hooks
+          </a>
+          <a href="/docs/hooks/useMap" class="text-blue-600 hover:text-blue-700 font-medium">
+            Next: useMap →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Data Structure React Hooks - Home">
+  <!-- Hero Section -->
+  <section class="text-center py-16">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">
+        Data Structure React Hooks
+      </h1>
+      <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        A collection of React hooks for working with data structures like Arrays, Maps, Sets, Queues, and Stacks with automatic re-rendering.
+      </p>
+      <div class="flex justify-center space-x-4">
+        <a href="/docs/getting-started" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          Get Started
+        </a>
+        <a href="/docs/hooks" class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+          View Hooks
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Library Section -->
+  <section class="py-16 bg-white rounded-lg shadow-sm mb-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Why This Library Exists</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">The Problem</h3>
+          <p class="text-gray-600 mb-4">
+            When working with JavaScript's built-in data structures (Array, Map, Set) in React,
+            mutations don't trigger re-renders. This leads to:
+          </p>
+          <ul class="text-gray-600 space-y-2">
+            <li>• Manual state management for every operation</li>
+            <li>• Inconsistent UI updates</li>
+            <li>• Complex state synchronization</li>
+            <li>• Performance issues with large datasets</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">The Solution</h3>
+          <p class="text-gray-600 mb-4">
+            Our hooks provide a seamless way to work with data structures:
+          </p>
+          <ul class="text-gray-600 space-y-2">
+            <li>• Automatic re-rendering on mutations</li>
+            <li>• Familiar native API methods</li>
+            <li>• TypeScript support</li>
+            <li>• Zero configuration required</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Available Hooks</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-blue-600 font-bold text-lg">A</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">useArray</h3>
+          <p class="text-gray-600 mb-4">
+            Reactive array with all native methods (push, pop, splice, etc.) that automatically trigger re-renders.
+          </p>
+          <a href="/docs/hooks/useArray" class="text-blue-600 hover:text-blue-700 font-medium">Learn more →</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-green-600 font-bold text-lg">M</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">useMap</h3>
+          <p class="text-gray-600 mb-4">
+            Reactive Map with set, delete, and clear operations that automatically trigger re-renders.
+          </p>
+          <a href="/docs/hooks/useMap" class="text-blue-600 hover:text-blue-700 font-medium">Learn more →</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-purple-600 font-bold text-lg">S</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">useSet</h3>
+          <p class="text-gray-600 mb-4">
+            Reactive Set with add, delete, and clear operations that automatically trigger re-renders.
+          </p>
+          <a href="/docs/hooks/useSet" class="text-blue-600 hover:text-blue-700 font-medium">Learn more →</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-orange-600 font-bold text-lg">Q</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">useQueue</h3>
+          <p class="text-gray-600 mb-4">
+            Reactive Queue implementation with enqueue, dequeue, peek, and isEmpty operations.
+          </p>
+          <a href="/docs/hooks/useQueue" class="text-blue-600 hover:text-blue-700 font-medium">Learn more →</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-red-600 font-bold text-lg">S</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">useStack</h3>
+          <p class="text-gray-600 mb-4">
+            Reactive Stack implementation with push, pop, peek, and isEmpty operations.
+          </p>
+          <a href="/docs/hooks/useStack" class="text-blue-600 hover:text-blue-700 font-medium">Learn more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start Section -->
+  <section class="py-16 bg-gray-900 text-white rounded-lg">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">Ready to Get Started?</h2>
+      <p class="text-gray-300 mb-8 text-lg">
+        Install the package and start using reactive data structures in your React components.
+      </p>
+      <div class="bg-gray-800 p-6 rounded-lg text-left max-w-2xl mx-auto">
+        <pre class="text-green-400"><code>npm install data-strcture-react-hooks</code></pre>
+      </div>
+      <div class="mt-8">
+        <a href="/docs/getting-started" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          Read the Documentation
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

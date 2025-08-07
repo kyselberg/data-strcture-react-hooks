@@ -1,0 +1,197 @@
+---
+import CodeExample from '../../../components/CodeExample.astro';
+import MapExample from '../../../components/MapExample';
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="useMap - Data Structure React Hooks">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/docs" class="hover:text-blue-600">Docs</a>
+        <span class="mx-2">/</span>
+        <a href="/docs/hooks" class="hover:text-blue-600">Hooks</a>
+        <span class="mx-2">/</span>
+        <span>useMap</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">useMap</h1>
+      <p class="text-xl text-gray-600">
+        A hook that returns a reactive Map with set, delete, and clear operations that automatically trigger re-renders.
+      </p>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      <h2>Installation</h2>
+      <CodeExample code="import { useMap } from 'data-strcture-react-hooks';" />
+
+      <h2>Basic Usage</h2>
+      <CodeExample code={`function MyComponent() {
+  const map = useMap([['key1', 'value1'], ['key2', 'value2']]);
+
+  return (
+    <div>
+      <p>Size: {map.size}</p>
+      <button onClick={() => map.set('key3', 'value3')}>Add Entry</button>
+      <button onClick={() => map.delete('key1')}>Remove Key</button>
+    </div>
+  );
+}`} />
+
+      <h2>API Reference</h2>
+
+      <h3>Parameters</h3>
+      <ul>
+        <li><code>defaultValue</code> ([K, V][]): The initial map entries as an array of key-value pairs</li>
+      </ul>
+
+      <h3>Returns</h3>
+      <p>A reactive Map with set, delete, and clear operations that automatically trigger re-renders when mutated.</p>
+
+      <h3>Supported Methods</h3>
+      <p>The returned Map supports the following mutating methods:</p>
+      <ul>
+        <li><code>set(key, value)</code> - Sets a key-value pair</li>
+        <li><code>delete(key)</code> - Removes a key-value pair</li>
+        <li><code>clear()</code> - Removes all key-value pairs</li>
+      </ul>
+
+      <h3>Non-Mutating Methods</h3>
+      <p>The following methods work as expected but don't trigger re-renders:</p>
+      <ul>
+        <li><code>get(key)</code> - Gets a value by key</li>
+        <li><code>has(key)</code> - Checks if a key exists</li>
+        <li><code>keys()</code> - Returns an iterator of keys</li>
+        <li><code>values()</code> - Returns an iterator of values</li>
+        <li><code>entries()</code> - Returns an iterator of key-value pairs</li>
+        <li><code>forEach(callback)</code> - Iterates over all entries</li>
+      </ul>
+
+      <h2>Live Example</h2>
+      <p>Try out the useMap hook with this interactive example:</p>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+        <MapExample client:load />
+      </div>
+
+      <h2>Examples</h2>
+
+      <h3>Basic Map Operations</h3>
+      <CodeExample code={`const map = useMap([['name', 'John'], ['age', 30]]);
+
+// Add entries
+map.set('city', 'New York');     // Map(3) { 'name' => 'John', 'age' => 30, 'city' => 'New York' }
+map.set('email', 'john@example.com');
+
+// Remove entries
+map.delete('age');               // Map(2) { 'name' => 'John', 'city' => 'New York' }
+
+// Clear all
+map.clear();                     // Map(0) {}`} />
+
+      <h3>User Settings Example</h3>
+      <CodeExample code={`function UserSettings() {
+  const settings = useMap([
+    ['theme', 'dark'],
+    ['language', 'en'],
+    ['notifications', true]
+  ]);
+
+  const toggleTheme = () => {
+    const currentTheme = settings.get('theme');
+    settings.set('theme', currentTheme === 'dark' ? 'light' : 'dark');
+  };
+
+  const toggleNotifications = () => {
+    const current = settings.get('notifications');
+    settings.set('notifications', !current);
+  };
+
+  return (
+    <div>
+      <h3>Settings</h3>
+      <p>Theme: {settings.get('theme')}</p>
+      <p>Language: {settings.get('language')}</p>
+      <p>Notifications: {settings.get('notifications') ? 'On' : 'Off'}</p>
+
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      <button onClick={toggleNotifications}>Toggle Notifications</button>
+
+      <button onClick={() => settings.set('language', 'es')}>
+        Set Spanish
+      </button>
+    </div>
+  );
+}`} />
+
+      <h3>Form Data Example</h3>
+      <CodeExample code={`function FormComponent() {
+  const formData = useMap([]);
+  const [inputKey, setInputKey] = useState('');
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputKey && inputValue) {
+      formData.set(inputKey, inputValue);
+      setInputKey('');
+      setInputValue('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={inputKey}
+        onChange={(e) => setInputKey(e.target.value)}
+        placeholder="Field name"
+      />
+      <input
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Field value"
+      />
+      <button type="submit">Add Field</button>
+
+      <div>
+        {Array.from(formData.entries()).map(([key, value]) => (
+          <div key={key}>
+            <strong>{key}:</strong> {value}
+            <button onClick={() => formData.delete(key)}>Remove</button>
+          </div>
+        ))}
+      </div>
+    </form>
+  );
+}`} />
+
+      <h2>How It Works</h2>
+      <p>
+        The useMap hook uses JavaScript's Proxy API to intercept method calls on the Map.
+        When a mutating method (set, delete, clear) is called, it triggers a re-render of
+        the component by updating an internal state variable. This ensures that your UI stays
+        in sync with the Map's state.
+      </p>
+
+      <h2>TypeScript Support</h2>
+      <p>
+        The hook is fully typed and supports generic types:
+      </p>
+      <CodeExample code={`const stringMap = useMap<string, string>([['key', 'value']]);
+const numberMap = useMap<string, number>([['count', 42]]);
+const mixedMap = useMap<string, any>([['data', { id: 1, name: 'John' }]]);`} />
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <div class="flex justify-between">
+          <a href="/docs/hooks/useArray" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Previous: useArray
+          </a>
+          <a href="/docs/hooks/useSet" class="text-blue-600 hover:text-blue-700 font-medium">
+            Next: useSet →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
