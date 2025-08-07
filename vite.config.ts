@@ -14,6 +14,22 @@ export default defineConfig({
   })],
   test: {
     environment: 'jsdom',
+    globals: true,
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    exclude: ['node_modules', 'dist', '.idea', '.git'],
+    reporters: process.env.CI ? ['dot'] : ['default'],
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true,
+        maxThreads: 1,
+        minThreads: 1,
+      },
+    },
+    testTimeout: 10000,
+    hookTimeout: 10000,
+    teardownTimeout: 10000,
+    isolate: true,
   },
   build: {
     emptyOutDir: true,

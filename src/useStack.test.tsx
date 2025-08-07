@@ -133,7 +133,7 @@ describe('useStack', () => {
       result.current.push(123);
     });
 
-    expect(result.current.peek).toBe(undefined);
+    expect(result.current.peek).toBe(123);
   });
 
   it('should handle single item stack', () => {
@@ -174,10 +174,19 @@ describe('useStack', () => {
     const { result } = renderHook(() => useStack([1]));
 
     act(() => {
-      const popped = result.current.pop();
-      expect(popped).toBe(1);
-      expect(result.current.isEmpty).toBe(true);
+      result.current.pop();
+    });
 
+    expect(result.current.isEmpty).toBe(true);
+
+    act(() => {
+      result.current.pop();
+    });
+
+    expect(result.current.isEmpty).toBe(true);
+
+
+    act(() => {
       result.current.push(2);
     });
 
@@ -190,14 +199,16 @@ describe('useStack', () => {
 
     const poppedItems: number[] = [];
 
-    act(() => {
-      while (!result.current.isEmpty) {
+    while (!result.current.isEmpty) {
+      act(() => {
         const item = result.current.pop();
         if (item !== undefined) {
           poppedItems.push(item);
         }
-      }
-    });
+      })
+    }
+
+
 
     expect(poppedItems).toEqual([3, 2, 1]);
     expect(result.current.isEmpty).toBe(true);

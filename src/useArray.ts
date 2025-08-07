@@ -19,7 +19,7 @@ export const useArray = <T>(defaultValue: T[]) => {
         setVersion(v => v + 1);
     }, []);
 
-    const arrayRef = useRef<T[]>(structuredClone(defaultValue));
+    const arrayRef = useRef<T[]>(Array.isArray(defaultValue) ? [...defaultValue] : []);
 
     const proxyRef = useRef<T[]>(new Proxy(arrayRef.current, {
         get(target, prop: string | symbol, receiver: T[]) {
