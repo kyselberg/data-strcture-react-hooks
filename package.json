@@ -9,9 +9,18 @@
   ],
   "version": "1.0.0",
   "license": "MIT",
+  "types": "./dist/types/index.es.d.ts",
+  "main": "./dist/index.es.js",
+  "module": "./dist/index.es.js",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/kyselberg/data-strcture-react-hooks"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "homepage": "https://github.com/kyselberg/data-strcture-react-hooks",
   "keywords": [
