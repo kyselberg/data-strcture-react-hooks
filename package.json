@@ -22,7 +22,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/kyselberg/data-strcture-react-hooks",
+  "homepage": "https://data-strcture-react-hooks.vercel.app/",
   "keywords": [
     "react",
     "hooks",
