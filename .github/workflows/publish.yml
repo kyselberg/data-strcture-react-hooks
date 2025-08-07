@@ -28,7 +28,7 @@ jobs:
       - name: Install deps & build & test
         run: |
           npm ci
-          npm run test:run
+          npm run test:ci
           npm run build
         env:
           NODE_OPTIONS: --max-old-space-size=4096
